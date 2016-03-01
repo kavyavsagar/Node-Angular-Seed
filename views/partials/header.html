@@ -1,0 +1,87 @@
+<header ng-controller="HeaderCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 col-sm-6 col-xs-6">
+                <div class="main-nav">
+                    <a class="cd-primary-nav-trigger" href="javascript:void(0);" style="z-index:99;">
+                    <span class="cd-menu-icon"></span>
+                    </a> <!-- cd-primary-nav-trigger --> 
+                    </div>
+                <div class="ap-logo">
+                    <a href="/"><img src="/assets/images/APARTMENT_LINEUP_EF_V1.png"></a>
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-6 col-xs-6">
+                <div class="head-right-nav">
+                    <ul class="searchnbrowser">
+                        <li><a href="/search">Search</a></li>
+                        <li><a href="/browse">Browse</a></li>
+                    </ul>
+                    <div class="loginjoin" ng-hide="userLog">    
+                        <a href="javascript:void(0);" ng-click="getLogin();" class="login">Login</a>
+                        <span>or</span>
+                        <a href="javascript:void(0);" ng-click="getJoin();" class="join">Join</a>                  
+                    </div>
+                    <div class="loginjoin" ng-show="userLog">
+                        <a ng-href="/mylineups"  class="join" style="padding:6px 20px; margin-right:15px;">My Lineups</a>
+                        <a href="#" data-toggle="dropdown" role="button" id="drop4" class="user-pic">Account       
+                        </a>                        
+                        <ul aria-labelledby="drop4" role="menu" class="dropdown-menu" id="menu1"> 
+                         <li role="presentation" class="wl-user"> 
+                          <span>Welcome,</span><br/>{{userdata.email}}</li>
+                          <li role="presentation"><a href="#" ng-click="logout()" tabindex="-1" role="menuitem">Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12">
+              <ul class="searchnbrowser searchnbrowser-mobile">
+                <li><a href="/search">Search</a></li>
+                <li><a href="/browse">Browse</a></li>
+              </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<nav ng-controller="NewsletterCtrl">
+<ul class="cd-primary-nav">
+<div class="row auto-row">
+<div class="col-md-6">
+<ul>
+    <li><a href="/aboutus" class="menu-link-trigger">About us</a></li>
+    <li><a href="/contact" class="menu-link-trigger">Contact</a></li>
+    <li><a href="/privacy" class="menu-link-trigger">Privacy</a></li>   
+    <li><a href="/terms-of-use" class="menu-link-trigger">terms</a></li>
+</ul>
+</div>
+<div class="col-md-4">
+    <p class="menu-cont">You know what's your competition looks like offline, but do you know what they look like 
+    <a href="#">online?</a></p>
+</div>
+<div class="clearfix"></div>
+<div class="col-md-6">
+<ul class="sec-social">
+    <li class="cd-head">Follow us</li>
+    <li class="cd-social"><a href="#"><i class="fa fa-linkedin-square"></i></a></li>
+    <li class="cd-social"><a href="#"><i class="fa fa-twitter"></i></a></li>
+    <li class="cd-social"><a href="#"><i class="fa fa-facebook-square"></i></a></li>
+    </ul>
+    </div>
+    <div class="col-md-5">
+    <div class="signup-head">Sign up for our monthly newsletter</div>
+
+    <div id="newslettermsg" ng-class="adClass">{{message}}</div>
+    <form  action="//apartmentlineup.us8.list-manage.com/subscribe/post?u=878ab18cb328d3bcfa01761bd&id=45bab07d5e" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank"> <!--id="newsletter_form" ng-submit="newsletter()"-->
+      <div class="input-group subscribe-sec">
+         <input class="btn btn-lg" name="EMAIL" id="email" type="email" placeholder="email address" required ng-model="newsEmail" id="mce-EMAIL">
+         <button class="btn btn-subscribe btn-lg" type="submit">Submit</button>
+         <p>We promise to never spam you</p>
+      </div>
+    </form>
+    </div>    
+    </div>
+</ul>
+</nav>
+<div ng-include="'/partials/login.html'"></div>
+<script src="../assets/js/main.js"></script> 

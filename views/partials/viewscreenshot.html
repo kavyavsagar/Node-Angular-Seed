@@ -1,0 +1,23 @@
+<!-- MODEL -->
+<div class="modal fade pop-bg in screnshow" id="screenshot-{{viewLineupDetails._id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="close-button">
+        <button type="button" class="cls-scroll" data-dismiss="modal">
+            <span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+    </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-spacer">
+         <div class="container-fluid">
+            <h4>{{viewLineupDetails.google.apart_name}}</h4> 
+            <h5><img src="/assets/images/desktop-icon.png" class="icon-indicator" alt=""/>Desktop</h5> 
+            <img ng-src="{{viewLineupDetails.screen_captures.fullPic != NULL && viewLineupDetails.screen_captures.fullPic|| '/assets/images/loader.gif'}}" alt="" err-SRC="/assets/images/loader.gif"/>             
+            <div class="clearfix"></div><br>          
+            <h5><img src="/assets/images/mobile-icon.png" class="icon-indicator" alt=""/>Mobile</h5> 
+            <img src="{{viewLineupDetails.screen_captures.mobPic}}" alt="" ng-show="viewLineupDetails.screen_captures.mobPic">                         
+            <hr>
+            <a class="cls-2" aria-hidden="true" data-dismiss="modal">
+            <h4 class="close-text">CLOSE</h4></a> 
+          </div>
+        </div>
+    </div>
+</div>   
+<!-- END MODEL-->

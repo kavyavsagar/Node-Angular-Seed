@@ -1,0 +1,127 @@
+<link rel="stylesheet" href="../assets/css/fluid.css" type="text/css">
+<style>
+#gmap {
+         position: absolute; 
+         left: 0; 
+         top: 0;
+         margin-left: 0px;        
+}
+#listing{
+/*  position: relative;
+    bottom: 0;
+    height: 100%;
+    top: 0;
+    margin-bottom: 90px;*/
+}
+</style>
+<section class="header-nav header-nav-search">
+    <div class="container-fluid">
+        <div class="row">      
+            <div class="col-md-6"> 
+                 <div class="input-group apt-search">
+                 <form ng-submit="showAddress()">
+                    <input id="addr" name="addr" type="text" placeholder="Search by city,zip or landmark" class="form-control fluid-search"/>
+                    <!-- <a class="mylocatn" href="#" ng-click="getLocation()"></a>-->
+                    <span class="input-group-btn">
+                        <button  class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                    </span> 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-------------- MAP ------------------>
+
+<!-- map minimizer -->
+<div id="minimize" style="position:absolute; top:0; right:-1px; width: 21px; height: 21px; cursor: pointer; z-index: 100; ">
+<img src="/assets/images/left_arrow.gif" ng-click="togglePanel()" title="Show panel" />
+</div>
+
+<div id="wrapper" style="position:absolute;left:0; width:100%; height:100%; z-index: 0;">
+
+<div id="gmap" ng-init="init()"></div>
+
+<div id="rightpanel">
+
+<div id="panel-tabs" >
+
+    <!-- map maximizer -->
+    <img src="/assets/images/right_arrow.gif" ng-click="togglePanel('left')" alt="Hide panel" title="Hide panel" style="float:left; margin:0 8px 4px 0; width:12px; height:22px;cursor: pointer;"/>
+
+
+</div><!-- end panel-tabs-->
+
+
+<div id="allpanelCards">
+
+
+<div id="listing">    
+    <ul id="places" class="menu"></ul>
+</div><!-- end listing -->
+<div class="show-btn-sec">
+    <button id="more" type="button" class="btn-liquid">Show More >></button>
+</div>
+</div><!-- end listing -->
+
+</div>
+</div><!-- end allpanelCards, leftpanel, wrapper -->
+
+<div class="clearfix"></div>
+<!---------- Add Lineups ---------------->
+<div id="add-lineups" class="modal fade pop-bg">
+    <div class="modal-dialog">
+      <div class="modal-content popup">
+        <button aria-hidden="true" data-dismiss="modal" class="close close-btn" type="button"><span class="glyphicon glyphicon-remove"></span></button>
+        <div class="clearfix"></div>
+        <div class="addlineup">
+            <h3>Add to My Lineups</h3>
+            <div class="alert" style="display:none;"></div>
+            <a href="#" class="aprt-line">
+                <p>Create a new lineup</p>
+            </a>
+            <div id="hide-opt">
+            <!---------- Sample popup ---------------->
+             <div class="filter">
+                <h3>Create New Lineup</h3>                      
+                <form role="form" class="form-horizontal create-new-lineup" ng-submit="saveLineup()">
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                          <input type="text" placeholder="Lineup name..." id="inputEmail3" ng-model="lineuplabel" class="form-control add-control">
+                        </div>                                
+                        <button class="create-btn addbtn">Add</button>   
+                    </div>         
+                </form>
+            </div>
+            <!---------- Sample popup END ---------------->
+            </div>
+            <div id="hide-opt2">
+                <p>or Select a Lineup Below</p>              
+                <div ng-hide="!loader" id="loading">                
+                    <img id="loading-image" src="/assets/images/loader.gif" alt="Loading..." />
+                </div>
+                <ul class="addlineup-list">                    
+                    <li class="check-active" ng-repeat="mylabels in lsLineups">
+                        <div ng-click="selRow(mylabels._id, $index);">
+                            <div class="select-lineup">
+                                <input type="radio" id="radio{{$index}}" name="lineupId" class="css-checkbox" ng-model="existlineup" ng-value="mylabels._id" /><label class="css-label radGroup1">
+                                {{( mylabels.labelName | limitTo: 10 ).trim()}} <span ng-show="mylabels.labelName.length > 10">...</span></label>                       
+                            </div>
+                            <ul class="lineup-picks">
+                                <li ng-repeat="lineup in mylabels.lineups | limitTo : 4">
+                                    <img src="{{lineup.screen_captures.thumbPic}}" alt="" ng-show="{{lineup.screen_captures.thumbPic && lineup.screen_captures.thumbPic != NULL}}" class="bgloader"/>                                                  
+                                    <img src="/assets/images/no-image_100.png" alt="" ng-hide="{{lineup.screen_captures.thumbPic && lineup.screen_captures.thumbPic != NULL}}" />                                                                               
+                                </li>                            
+                                <span class="list-more" ng-if="mylabels.lineups.length > 4"  style="display:none;"><a href="#">+ {{mylabels.lineups.length}}</a></span>
+                            </ul>
+                        </div>
+                    </li>                   
+                </ul>
+            </div>    
+        </div>
+      </div>        
+    </div>
+   </div>
+<!---------- Add Lineups END ---------------->

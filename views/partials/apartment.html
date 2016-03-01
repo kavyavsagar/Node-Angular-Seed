@@ -1,0 +1,203 @@
+<div id="detailapart" class="modal fade bs-example-modal-lg pop-bg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content popup">
+        <button aria-hidden="true" data-dismiss="modal" class="close close-btn" type="button" ng-click="close();"><span class="glyphicon glyphicon-remove"></span></button>           
+    <div class="container-fluid">
+        <div class="region-grid ">           
+            
+           <a href="javascript:void(0);" id="addlineups-popup" ng-click="loadLineUps(viewLineupDetails);"  class="pull-left"><div class="more-pics"><i class="icon-browse_map"></i></div></a>	           
+           <div class="title-info title-region" style="text-align: left;">
+           <h5>{{viewLineupDetails.apart_name}}</h5>
+           <p ng-if="viewLineupDetails.address">{{viewLineupDetails.address}}</p>
+           <p ng-if="(viewLineupDetails.city || viewLineupDetails.state || viewLineupDetails.zipcode)">{{(viewLineupDetails.city).trim()}}<span ng-show="(viewLineupDetails.city && viewLineupDetails.state)">,</span> {{( viewLineupDetails.state).trim()}}&nbsp;{{viewLineupDetails.zipcode}}</p>
+           <p class="mt10" ng-if="(viewLineupDetails.website || viewLineupDetails.gplus)"><a class="web-adr" href="{{ viewLineupDetails.website }}" target="_blank">{{ viewLineupDetails.website | domain}}</a>                
+           <a href="{{ viewLineupDetails.gplus}}" target="_blank" class="gplus"><img src="/assets/images/google-plus.png" alt=""/></a>    
+           </p>
+           </div>               
+        </div>
+        <div class="region-grid">
+           <div class="company-gallery">                   
+               <img src="{{viewLineupDetails.fullPic}}" err-SRC="/assets/images/no-image.jpg" alt="" class="bgloader" ng-cloak  ng-class="{'hide' :viewLineupDetails.smallPic == NULL &&  !viewLineupDetails.smallPic}"/>
+               <img src="/assets/images/no-image.jpg"  alt="" ng-show="showNoimage" />
+           </div>
+           <div class="region-grid"> 
+               <div class="loadmore">                      
+                  <a href="javascript:void(0);" ng-click="viewScreenshots(viewLineupDetails._id)">View all screenshots</a>
+               </div>               
+               <div id="accordion" style="border-bottom: 1px solid #EFF2F7;">
+                 <!-- GOOGLE MAP -->
+                 <div class="region-default">
+                   <div class="panel-heading">
+                       <h4 class="panel-title">
+                       <a class="si-icons si-icons-default" data-toggle="collapse" data-parent="#accordion" href="javascript:void(0)" onclick="toggleCustom(this);" rel="gmap1">
+                           Google Map                    
+                           <span class="glyphicon glyphicon-chevron-down collapse-icon fn-expand"></span>
+                            <span class="glyphicon glyphicon-chevron-up collapse-icon fn-collapse"></span>
+                         </a>
+                       </h4>
+                   </div>
+                   <div id="collapseOne" class="panel-collapse gmap1">
+                       <div class="panel-body">
+                         <map id="map-marker" center="[{{viewLineupDetails.lat}}, {{viewLineupDetails.lng}}]" zoom-control="true" zoom="8" style="height: 150px;">
+                          <marker position="[{{viewLineupDetails.lat}}, {{viewLineupDetails.lng}}]" title="{{viewLineupDetails.apart_name}}" draggable="true" visible="true" icon="/assets/images/ic_blue.png"> </marker>
+                        </map> 
+                     </div>
+                   </div>
+                 </div>
+                 <!--REVIEWS -->
+                 <div class="region-default">
+                   <div class="panel-heading">
+                     <h4 class="panel-title">                         
+                        <a class="si-icons si-icons-default" data-toggle="collapse" data-parent="#accordion" href="javascript:void(0)" onclick="toggleCustom(this);" rel="review1">
+                       Google+&nbsp;&nbsp;  
+                       <span class="rating-val" ng-if="viewLineupDetails.rating >0">{{viewLineupDetails.rating}}</span>
+                            <div class="featured-review-star-rating" style="top:0;">  
+                                    <div class="tiny-star-yellow star-rating-yellow"> 
+                                    <div style="width: {{viewLineupDetails.rating * 20}}%;" class="current-rating"></div>         
+                              </div>  
+                             </div>
+                             <div class="review"> {{viewLineupDetails.total_reviews}} reviews</div>
+                         <span class="glyphicon glyphicon-chevron-down collapse-icon fn-expand"></span>
+                            <span class="glyphicon glyphicon-chevron-up collapse-icon fn-collapse"></span>
+                       </a>
+                     </h4>                                            
+                   </div>
+                   <div id="collapseTwo" class="panel-collapse collapse review1">
+                     <div class="panel-body" ng-repeat="review in viewLineupDetails.reviews | limitTo : 3">                           
+                       <div class="featured-review" style="max-width: 100%;">
+                           <div class="author">
+                               <a href="{{review.author_url}}">
+                                   <img class="author-image" src="/assets/images/user-img.jpg">
+                               </a>    
+                           </div>
+                           <div>
+                            <span class="author-name"> <a href="{{review.author_url}}">{{review.author_name}}</a></span>
+                               <div class="featured-review-star-rating">  
+                                   <div class="tiny-star star-rating-non-editable-container"> 
+                                       <div class="current-rating" style="width:{{review.rating * 20}}%;">{{review.rating}}</div> 
+                                   </div>  
+                               </div>
+                               <div class="quoted-review">
+                                   <div class="review-text" style="max-height:none;"><span class="review-title">{{review.text}}</span></div>
+                               </div>
+                            <a class="showmore" href="{{viewLineupDetails.gplus}}" target="_blank" ng-if="(viewLineupDetails.total_reviews && $index == 2)">View all reviews</a>
+                           </div>                         
+                       </div>                          
+                    </div>                        
+                   </div>
+                 </div>
+                 <!--OFFICE HOURS -->
+                 <div class="region-default">
+                   <div class="panel-heading">
+                     <h4 class="panel-title">
+                       <a class="si-icons si-icons-default"  data-parent="#accordion" data-toggle="collapse" class="collapsed" href="javascript:void(0)" onclick="toggleCustom(this);" rel="office1">
+                         Office Hours
+                       <span class="glyphicon glyphicon-chevron-down collapse-icon fn-expand"></span>
+                            <span class="glyphicon glyphicon-chevron-up collapse-icon fn-collapse"></span>
+                       </a>
+                     </h4>
+                   </div>
+                   <div class="panel-collapse collapse office1" id="collapseThree" style="height: auto;">
+                     <div class="panel-body" style="padding: 20px 0;">
+                       <div class="office-time">
+                           <div class="mon big-mon" style="margin:0 40px;" ng-repeat="offic in viewLineupDetails.opening_hours.periods">  
+                               {{offic.dayname}} 
+                               <div class="day-line"> 
+                               <div class="current-timing" style="height: {{offic.time * 4.166666667}}%;"></div> 
+                               </div> 
+                               {{offic.time}}  
+                            </div>
+                           <div class="clearfix"></div>   
+                            <div class="total-timing">Total Hours {{viewLineupDetails.opening_hours.totalhrs}} hrs/week</div>
+                       </div>
+                     </div>
+                   </div>                        
+                 </div>                      
+               </div>
+             </div>
+           <div class="clearfix"></div>    
+     </div>        
+ </div>    
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function toggleCustom(obj) {
+        var row = $(obj).attr('rel');
+        if (row == 'gmap1') {
+            $("." + row).toggleClass("hide");
+        } else {
+            $("." + row).toggleClass("show");
+        }      
+        $(obj).toggleClass('newer');
+    }
+    // show modal
+    $( document ).ready(function() {  
+        
+        $('#detailapart').modal({
+                show: true,
+                backdrop : false,
+                keyboard: false
+              });     
+        $('#detailapart').on('show.bs.modal', function (e) {
+            google.maps.event.trigger('#map-marker', 'resize');       
+        });              
+        
+    });
+</script>
+<!---------- Add Lineups ---------------->
+<div id="add-lineups" class="modal fade pop-bg">
+    <div class="modal-dialog">
+        <div class="modal-content popup">
+            <button aria-hidden="true" data-dismiss="modal" class="close close-btn" type="button"><span class="glyphicon glyphicon-remove"></span></button>
+            <div class="clearfix"></div>
+            <div class="addlineup">
+                <h3>Add to My Lineups</h3>
+                <div class="alert" style="display:none;"></div>
+                <a href="#" class="aprt-line">
+                    <p>Create a new lineup</p>
+                </a>
+                <div id="hide-opt">
+                    <!---------- Sample popup ---------------->
+                    <div class="filter">
+                        <h3>Create New Lineup</h3>                      
+                        <form role="form" class="form-horizontal create-new-lineup" ng-submit="saveLineup()">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="text" placeholder="Lineup name..." id="inputEmail3" ng-model="lineuplabel" class="form-control add-control">
+                                </div>    
+                                <div class="col-sm-2">
+                                    <button class="create-btn addbtn">Add</button> 
+                                </div>
+                            </div>         
+                        </form>
+                    </div>
+                    <!---------- Sample popup END ---------------->
+                </div>
+                <div id="hide-opt2">
+                    <p>or Select a Lineup Below {{tester}}</p>
+                    
+                    <ul class="addlineup-list">                    
+                        <li class="check-active" ng-repeat="mylabels in uLineups">
+                            <div ng-click="selRow(mylabels._id, $index);">
+                                <div class="select-lineup">
+                                    <input type="radio" id="radio{{$index}}" name="lineupId" class="css-checkbox" ng-model="existlineup" ng-value="mylabels._id"/><label class="css-label radGroup1">{{( mylabels.labelName| limitTo: 10 ).trim()}} <span ng-show="mylabels.labelName.length > 10">...</span></label>                       
+                                </div>
+                                <ul class="lineup-picks">
+                                    <li ng-repeat="lineup in mylabels.lineups| limitTo : 4">                               
+                                        <img src="{{lineup.thumbpicture}}" alt="" ng-show="{{lineup.thumbpicture && lineup.thumbpicture != NULL}}" class="bgloader"/>                                                  
+                                        <img src="/assets/images/no-image_100.png" alt="" ng-hide="{{lineup.thumbpicture && lineup.thumbpicture != NULL}}" />                                                                               
+                                    </li>                            
+                                    <span class="list-more" ng-if="mylabels.lineups.length > 4" style="display:none;"><a href="#">+ {{mylabels.lineups.length}}</a></span>
+                                </ul>
+                            </div>
+                        </li>                   
+                    </ul>
+                </div>    
+            </div>
+        </div>        
+    </div>
+</div>
+<!---------- Add Lineups END ---------------->  
+<div ng-include="'/partials/viewscreenshot.html'"></div>

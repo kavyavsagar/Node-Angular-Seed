@@ -1,0 +1,251 @@
+<section class="mb20">
+	<div class="container">
+    	<div class="row">
+            <div class="col-md-12">
+                <h2>My Lineups</h2>
+            </div>        
+            <div ng-hide="!loading" id="loading">                
+                 <img id="loading-image" src="/assets/images/loader.gif" alt="Loading..." />
+            </div>
+        </div>
+    </div>
+</section>
+<div ng-repeat="(i, item) in myitems track by $index" ng-cloak ng-if="myitems.length > 0">
+<section class="region active-region">
+	<div class="container-fluid">
+    	<div class="row">
+            <div class="col-md-12">
+                <a data-toggle="collapse" data-parent="#accordion" href="#label_{{i}}" target="_self">{{item.labelName}}</a>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="label_{{i}}" class="panel-collapse collapse" ng-class="{in: i==0}">
+	<div class="container">
+    	<div class="row">           
+            <div class="col-md-4 col-sm-6 col-xs-12 xs-center mtb10" ng-repeat="alist in item.lineups | limitTo : itemsPerPage[i]">
+            <div class="apartment-grid">            	
+                <div class="region-grid wh-grid ">
+                  <div class="myal-grid">
+                    <img ng-src="{{alist.screen_captures.smallPic != NULL &&  alist.screen_captures.smallPic || '/assets/images/no-image.jpg'}}" alt="" err-SRC="/assets/images/no-image.jpg"/></div>
+                  <div>
+                    <div class="title-info ">                                      
+                    <h5>{{( alist.google.apart_name | limitTo: 22 ).trim()}} <span ng-show="alist.google.apart_name.length > 22">...</span></h5>
+                    <p ng-if="alist.google.address">{{( alist.google.address | limitTo: 40 ).trim()}}  <span ng-show="alist.google.address.length > 40">...</span></p>
+                    <p ng-if="(alist.google.city || alist.google.state || alist.google.zipcode)">{{( alist.google.city | limitTo: 20 ).trim()}}<span ng-show="(alist.google.city && alist.google.state)">,</span> {{( alist.google.state | limitTo: 15 ).trim()}}&nbsp;{{alist.google.zipcode}}</p>
+                    <p class="mt10" ng-if="(alist.google.website || alist.google.gplus)"><a href="{{ alist.google.website }} " target="_blank" class="web-adr">{{alist.google.website | domain}}</a> 
+                        <a href="{{ alist.google.gplus}}" target="_blank" class="gplus"><img src="/assets/images/google-plus.png" alt=""/></a>    
+                    </p>
+                    </div>
+                    <div class="action">                       
+                        <a class="del-icon" ng-click="delLineup(alist._id, item._id);"><i class="icon-trash"></i></a>
+                    </div>
+                </div>                    
+                    <div class="loadmore">
+                        <a ng-click="viewScreenshots(alist._id);" href="javascript:void(0)">View all screenshots</a>
+                    </div>  
+                    <!-- MODEL -->
+                    <div class="modal fade pop-bg in screnshow" id="screenshot-{{alist._id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="close-button">
+                            <button type="button" class="cls-scroll" data-dismiss="modal">
+                            <span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                        </div>
+                        <div class="modal-dialog modal-lg">
+                        <div class="modal-content modal-spacer">
+                            <h4>{{alist.google.apart_name}}</h4>
+                            <h5><img src="/assets/images/desktop-icon.png" class="icon-indicator" alt=""/>Desktop</h5> 
+                            <img ng-src="{{alist.screen_captures.fullPic != NULL &&  alist.screen_captures.fullPic || '/assets/images/loader.gif'}}" alt="" err-SRC="/assets/images/loader.gif"/>                                                                                                      
+                            <div class="clearfix"></div><br>  
+                            <h5 ><img src="/assets/images/mobile-icon.png" class="icon-indicator" alt=""/>Mobile</h5> 
+                            <img src="{{alist.screen_captures.mobPic}}" alt="" ng-show="alist.screen_captures.mobPic"> 
+                            <hr>
+                            <a class="cls-2" aria-hidden="true" data-dismiss="modal">
+                            <h4 class="close-text">CLOSE</h4></a>
+                        </div>
+                        </div>
+                    </div>   
+                    <!-- END MODEL-->
+                    <div id="accordion">
+                        <!-- GOOGLE MAP -->
+                      <div class="region-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="javascript:void(0)" onclick="toggleCustom(this);" rel="map_{{i}}_{{currentPage[i]}}">
+                              Google Map 
+                              <span class="glyphicon glyphicon-chevron-down collapse-icon fn-expand"></span>
+                            <span class="glyphicon glyphicon-chevron-up collapse-icon fn-collapse"></span>
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse map-row collapse map_{{i}}_{{currentPage[i]}}">
+                          <div class="panel-body">                           
+                          <map center="[{{alist.google.lat}}, {{alist.google.lng}}]" zoom-control="true" zoom="12"  style="height: 150px;" scrollwheel="false" draggable="false"> 
+                              <marker draggable="false" clickable="false" position="[{{alist.google.lat}}, {{alist.google.lng}}]" title="{{lalist.google.apart_name}}" visible="true" icon="/assets/images/ic_blue.png" > </marker>
+                            </map>                         
+                         <!--  <img src="https://maps.googleapis.com/maps/api/staticmap?center={{alist.google.lat}},{{alist.google.lng}}&zoom=11&size=300x150&markers=icon:{{baseUrl}}/assets/images/ic_blue.png|{{alist.google.lat}},{{alist.google.lng}}"> -->
+                          </div>
+                        </div>
+                      </div>
+                        <!-- REVIEWS -->
+                      <div class="region-default">
+                        <div class="panel-heading">                         
+                          <h4 class="panel-title">
+                             <a data-toggle="collapse" data-parent="#accordion" href="javascript:void(0)" onclick="toggleCustom(this);" rel="review_{{i}}_{{currentPage[i]}}">
+                                 Google+&nbsp;&nbsp;
+                                 <span class="rating-val" ng-if="alist.google.rating >0">{{alist.google.rating}}</span>
+                                 <div class="featured-review-star-rating" style="top:0;">  
+                                    <div class="tiny-star-yellow star-rating-yellow"> 
+                                    <div style="width: {{alist.google.rating * 20}}%;" class="current-rating"></div>         
+                               </div>  
+                              </div>
+                              <div class="review"> {{alist.google.total_reviews}} reviews</div>
+                              <span class="glyphicon glyphicon-chevron-down collapse-icon fn-expand"></span>
+                            <span class="glyphicon glyphicon-chevron-up collapse-icon fn-collapse"></span>
+                            </a>                           
+                          </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse review-row collapse review_{{i}}_{{currentPage[i]}}">
+                          <div class="panel-body" ng-repeat="review in alist.google.reviews | limitTo : 2">                           
+                            <div class="featured-review" style="margin-bottom: 0;">
+                            	<div class="author">
+                                    <a href="{{review.author_url}}">
+                                    	<img class="author-image" src="/assets/images/user-img.jpg">
+                                    </a>    
+                                </div>
+                                <div>
+                                <span class="author-name"> <a href="{{review.author_url}}">{{review.author_name}}</a></span>
+                                    <div class="featured-review-star-rating">  
+                                        <div class="tiny-star star-rating-non-editable-container"> 
+                                            <div class="current-rating" style="width:{{review.rating * 20}}%;">{{review.rating}}</div> 
+                                        </div>  
+                                    </div>
+                                    <div class="quoted-review">
+                                        <div class="review-text"><span class="review-title">{{( review.text| limitTo: 100 ).trim()}}</span> <span ng-show="review.text.length > 100">...</span></div>
+                                    </div>
+                                </div>
+                                <a class="showmore" href="{{alist.google.gplus}}" target="_blank" ng-if="(alist.google.total_reviews && $index==1)" style="margin:0;">View all reviews</a>
+                            </div>                                
+                         </div>                         
+                         <div class="panel-body" ng-if="alist.google.total_reviews == 0">                           
+                            <div class="no-review"> No reviews</div>
+                         </div>                         
+                        </div>
+                      </div>
+      <!-- YELP -->
+      <div class="region-default">
+  <div class="panel-heading">                         
+    <h4 class="panel-title">
+       <a data-toggle="collapse" data-parent="#accordion" href="javascript:void(0)" onclick="toggleCustom(this);" rel="reviewyelp_{{i}}_{{currentPage[i]}}">
+           Yelp &nbsp;&nbsp;
+           <span class="rating-val" ng-if="alist.yelp.rating >0">{{alist.yelp.rating}}</span>
+           <div class="featured-review-star-rating" style="top:0;">  
+            <img src="{{alist.yelp.rating_img_url_small}}" alt="">
+           </div>
+        <div class="review" ng-if="alist.yelp.review_count > 0"> {{alist.yelp.review_count}} reviews</div>
+        <div class="review" ng-show="!alist.yelp.review_count">0 reviews </div>
+        <span class="glyphicon glyphicon-chevron-down collapse-icon fn-expand"></span>
+      <span class="glyphicon glyphicon-chevron-up collapse-icon fn-collapse"></span>
+      </a>                           
+    </h4>
+  </div>
+<div id="collapseTwo" class="panel-collapse  collapse reviewyelp_{{i}}_{{currentPage[i]}}">
+  <div class="panel-body" ng-repeat="review in alist.yelp.reviews | limitTo : 2">                           
+    <div class="featured-review" style="margin-bottom: 0;">
+      <div class="author">
+        <a href="#" ng-show="review.user.image_url" target="_blank">
+          <img class="author-image" src="{{review.user.image_url}}"> 
+        </a>
+       </div>
+        <div>       
+        <span class="author-name" style="display:block;font-weight: 700;"> 
+        <a href="javascript:void(0)">{{review.user.name}}</a></span>
+                 
+           <div class="quoted-review">
+               <div class="review-text" style="max-height:none;"><span class="review-title">{{(review.excerpt | limitTo: 100 ).trim()}}</span><span ng-show="review.excerpt.length > 100">...</span>
+               </div>
+           </div>
+        </div>
+        <a class="showmore" href="{{alist.yelp.url}}" target="_blank" ng-if="(alist.yelp.review_count >0)" style="margin:0;">View all reviews</a>
+                                   
+ </div>                         
+ <div class="panel-body" ng-if="alist.yelp.review_count == 0">  
+    <div class="no-review"> No reviews</div>
+ </div>                         
+</div>
+</div>
+
+      <!-- OFFICE HOURS -->                      
+      <div class="region-default" >
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-parent="#accordion" data-toggle="collapse" class="collapsed" href="javascript:void(0)" onclick="toggleCustom(this);" rel="office_{{i}}_{{currentPage[i]}}">
+              Office Hours &nbsp; &nbsp;&nbsp; &nbsp;
+              <div class="review" ng-if="alist.google.opening_hours.totalhrs >0">Open&nbsp;{{alist.google.opening_hours.totalhrs}}&nbsp;hrs/week</div>
+              <div class="review" ng-hide="alist.google.opening_hours.totalhrs">Open&nbsp;0&nbsp;hrs/week</div>
+               <span class="glyphicon glyphicon-chevron-down collapse-icon fn-expand"></span>
+            <span class="glyphicon glyphicon-chevron-up collapse-icon fn-collapse"></span>
+            </a>
+          </h4>
+        </div>
+        <div class="panel-collapse collapse office-row office_{{i}}_{{currentPage[i]}}" id="collapseThree" style="height: auto;">
+          <div class="panel-body">
+            <div class="office-time">
+            	<div class="mon" ng-repeat="offic in alist.google.opening_hours.periods">  
+                   <div class="work-days">{{offic.days}} </div>
+                   <div class="work-time"> {{offic.time}}</div>
+                   <div class="clearfix"></div>
+                </div>
+                <div ng-hide="alist.google.opening_hours.periods"  ng-init="numberz=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']" >
+                  <div class="mon" ng-repeat="x in numberz">  
+                    <div class="work-days"> {{x}}</div>
+                    <div class="work-time">--</div>  
+                    <div class="clearfix"></div>                          
+                 </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>                        
+      </div>  
+                        <div class="clearfix"></div>  
+                    </div>
+                </div></div>
+            </div>          
+           
+        </div>
+    </div>
+     <div class="pagination loadmore" ng-class="nextPageDisabled(i);">               
+                    <a href ng-click="nextPage(i)">Load More »</a>                
+           </div>
+</section>
+</div>
+<div class="container" ng-if="myitems.length == 0" ng-cloak>
+<div class="row">           
+    <div class="col-md-12">
+        <div class="nodata">No lineups added yet !!</div> 
+    </div>    
+</div>
+</div>
+<script type="text/javascript">
+function toggleCustom(obj){
+    var row = $(obj).attr('rel');
+    
+    var spl = row.split("_");
+    switch(spl[0]){
+        case 'map':
+            $(".review-row").removeClass("show");
+            $(".office-row").removeClass("show");                     
+            break;
+        case 'review':
+            $(".map-row").removeClass("show");
+            $(".office-row").removeClass("show");
+            break;
+        case 'office':
+            $(".review-row").removeClass("show");
+            $(".map-row").removeClass("show");
+            break;
+    }
+    $("." + row).toggleClass("show");  
+    $(obj).toggleClass('newer');
+}  
+</script>
