@@ -8,15 +8,12 @@ Runs like a typical express app:
 
     node app.js
 
-### Receiving updates from upstream
-
-Just fetch the changes and merge them into your project with git.
-
-
 ## Directory Layout
 
 app.js        			# app config
+
 package.json  			# for npm
+
 config
 	--- env                 	# Config Files
         ------ uat.js          	# Test specific
@@ -74,5 +71,3 @@ Views				 # All html templates
 
 mail to :  Kavya Sagar <debugger@hotmail.co.uk>
 
-## License
-MIT
